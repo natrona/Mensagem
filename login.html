@@ -513,31 +513,33 @@
     
     // Login (a conta já está criada pois somente é criada após confirmação)
     function handleAuth() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      if (!email || !password) {
-        showNotification('Preencha todos os campos!', 'error');
-        return;
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if (!email || !password) {
+    showNotification('Preencha todos os campos!', 'error');
+    return;
+  }
+  signInWithEmailAndPassword(auth, email, password)
+    .then(userCredential => {
+      showNotification('Login bem-sucedido!', 'success');
+      failedAttempts = 0;
+      if(email === atob(adminEncrypted)) {
+        showNotification('Bem-vindo, Administrador!', 'success');
       }
-      signInWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
-          showNotification('Login bem-sucedido!', 'success');
-          failedAttempts = 0;
-          if(email === atob(adminEncrypted)) {
-            showNotification('Bem-vindo, Administrador!', 'success');
-          }
-        })
-        .catch(err => {
-          if (err.code === 'auth/wrong-password') {
-            failedAttempts++;
-            showNotification('Senha incorreta!', 'error');
-          } else if (err.code === 'auth/user-not-found') {
-            showNotification('Usuário não encontrado!', 'error');
-          } else {
-            showNotification('Erro: ' + err.message, 'error');
-          }
-        });
-    }
+      // Redireciona para a home após login bem-sucedido:
+      window.location.href = "home.html";
+    })
+    .catch(err => {
+      if (err.code === 'auth/wrong-password') {
+        failedAttempts++;
+        showNotification('Senha incorreta!', 'error');
+      } else if (err.code === 'auth/user-not-found') {
+        showNotification('Usuário não encontrado!', 'error');
+      } else {
+        showNotification('Erro: ' + err.message, 'error');
+      }
+    });
+        }
     window.handleAuth = handleAuth;
     
     // Cadastro: Armazena dados pendentes, gera código e exibe tela de verificação
