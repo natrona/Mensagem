@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HTML</title>
+  
+  <!-- HTML -->
+  
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  
+  <!-- Project -->
+  <script src="main.js"></script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - App de Mensagens</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700|Lato:400,700|Montserrat:400,700&display=swap" rel="stylesheet">
+  <!-- Firebase (Módulos) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1p3C-iRQ8YN4zuZgdE9cymUVYDiIaCcM",
+      authDomain: "mensagens-f4e31.firebaseapp.com",
+      databaseURL: "https://mensagens-f4e31-default-rtdb.firebaseio.com",
+      projectId: "mensagens-f4e31",
+      storageBucket: "mensagens-f4e31.firebasestorage.app",
+      messagingSenderId: "686232522910",
+      appId: "1:686232522910:web:d754fb4926802bbaf1eb8f",
+      measurementId: "G-4LRBJ623X3"
+    };
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    window.myFirebaseApp = app;
+  </script>
+  <style>
+    * { 
+        user-select: none; 
+        -webkit-user-select: none; 
+        -moz-user-select: none; 
+        -ms-user-select: none; 
+        -webkit-tap-highlight-color: transparent; 
+    }
+    a, button {
+        text-decoration: none;
+        outline: none;
+        border: none;
+        background: none;
+        color: inherit;
+    }
+    a:focus, button:focus {
+        outline: none;
+        box-shadow: none;
+    }
+</style>
+  <style>
+    /* Background animado contínuo */
+    body {
+      background: linear-gradient(135deg, #121212, #1f1f1f);
+      background-size: 400% 400%;
+      animation: gradientShift 60s ease infinite;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Botão padrão */
+    .btn {
+      width: 100%;
+      max-width: 300px;
+      padding: 16px;
+      margin: 10px auto;
+      border-radius: 20px;
+      border: none;
+      font-size: 15px;
+      outline: none;
+      background: linear-gradient(135deg, #3a3a3a, #575757);
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      font-family: 'Montserrat', sans-serif;
+      display: block;
+    }
+    .btn:hover { transform: scale(1.05); }
+    /* Container centralizado */
+    .container {
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      padding: 0 10px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    /* Logo – container e imagem menores */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 5px;
+      border-radius: 10px;
+      margin: 0 auto 20px;
+      max-width: 200px;
+      animation: fadeIn 1s ease;
+    }
+    .logo-container img { width: 20px; margin-right: 5px; }
+    .logo-container h1 { 
+      font-size: 16px; 
+      font-weight: bold; 
+      font-family: 'Montserrat', sans-serif; 
+    }
+    /* Títulos */
+    h2 {
+      font-size: 26px;
+      margin-bottom: 16px;
+      font-family: 'Montserrat', sans-serif;
+    }
+    /* Animação fade in up */
+    .fade-in-up {
+      animation: fadeInUp 0.5s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Animação fade out */
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    /* Inputs com mesmo tamanho que botões */
+    input {
+      width: 100%;
+      max-width: 300px;
+      padding: 16px;
+      border-radius: 20px;
+      border: none;
+      font-size: 15px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-family: 'Lato', sans-serif;
+      transition: background 0.3s ease;
+      display: block;
+      margin: 10px auto;
+      box-sizing: border-box;
+    }
+    input::placeholder { color: #bbb; }
+    input:focus {
+      background: rgba(255,255,255,0.2);
+    }
+    .password-container {
+      position: relative;
+      max-width: 300px;
+      margin: 10px auto;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .toggle-password:hover { transform: translateY(-50%) scale(1.2); }
+    /* Botão do Google com ícone */
+    .google-btn {
+      background: #fff;
+      color: #000;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'Montserrat', sans-serif;
+      width: 100%;
+      max-width: 300px;
+      margin: 10px auto;
+    }
+    /* Toggle para alternar entre login e cadastro */
+    .toggle {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #ccc;
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+      font-family: 'Lato', sans-serif;
+    }
+    .toggle:hover { color: #fff; }
+    .legal {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 18px;
+      color: #888;
+      animation: fadeIn 1.5s ease;
+      font-family: 'Lato', sans-serif;
+    }
+    .legal a {
+      text-decoration: underline;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .legal a:hover { color: #fff; }
+    /* Tela Legal – centralização total (sem top/left) */
+    .legal-screen {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, #121212, #1f1f1f);
+      color: #fff;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .legal-screen.show {
+      display: flex;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .legal-content {
+      width: 100%;
+      max-width: 300px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      font-family: 'Lato', sans-serif;
+      margin: 0 auto 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .legal-content h2 {
+      margin-bottom: 20px;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .legal-content p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: #ccc;
+      font-size: 14px;
+      word-wrap: break-word;
+    }
+    .legal-date {
+      font-size: 10px;
+      color: #aaa;
+      font-family: 'Lato', sans-serif;
+      text-align: center;
+    }
+    .legal-warning {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+      color: #ccc;
+      animation: fadeInUp 1s ease;
+      font-family: 'Lato', sans-serif;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Tela de Verificação de Email */
+    .verification-screen {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, #121212, #1f1f1f);
+      color: #fff;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 2500;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .verification-screen.show {
+      display: flex;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .verification-content {
+      width: 100%;
+      max-width: 300px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      font-family: 'Lato', sans-serif;
+      margin: 0 auto 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .verification-content h2 {
+      margin-bottom: 20px;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .verification-content p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: #ccc;
+      font-size: 14px;
+      word-wrap: break-word;
+    }
+    /* Notificações personalizadas */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-family: 'Lato', sans-serif;
+      z-index: 3000;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .notification.show {
+      opacity: 1;
+    }
+    .notification--success {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+    .notification--error {
+      background-color: #F44336;
+      color: #fff;
+    }
+    /* Estilo discreto para o link "Esqueceu a senha?" */
+    #forgot-password {
+      color: #bbb;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Notificação personalizada -->
+  <div id="notification" class="notification"></div>
+  
+  <!-- Tela principal -->
+  <div id="main-screen" class="container">
+    <div class="logo-container" id="logo-container">
+      <img src="sua-logo.png" alt="Logo do App">
+      <h1>Nome do App</h1>
+    </div>
+
+    <!-- Formulário de Login -->
+    <div id="login-form" class="fade-in-up">
+      <h2 class="fade-in-up">Login</h2>
+      <input type="email" id="email" placeholder="Email" required class="fade-in-up">
+      <div class="password-container fade-in-up">
+        <input type="password" id="password" placeholder="Senha" required class="fade-in-up">
+        <svg class="toggle-password" onclick="togglePassword('password')" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#bbb" viewBox="0 0 24 24">
+          <path d="M12 4.5C7.305 4.5 3.291 7.258 1.5 12c1.791 4.742 5.805 7.5 10.5 7.5s8.709-2.758 10.5-7.5C20.709 7.258 16.695 4.5 12 4.5zm0 13c-3.04 0-5.5-2.46-5.5-5.5S8.96 6.5 12 6.5s5.5 2.46 5.5 5.5-2.46 5.5-5.5 5.5z"/>
+          <circle cx="12" cy="12" r="2.5"/>
+        </svg>
+      </div>
+      <button class="btn fade-in-up" onclick="handleAuth()">Entrar</button>
+      <button class="btn google-btn fade-in-up" onclick="loginWithGoogle()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.6 0 6.8 1.2 9.2 3.2l6.8-6.8C35 2.4 29.2 0 24 0 14.8 0 6.8 5.4 2.6 13.2l7.8 6.1C12.6 13.1 17.7 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.1 24.5c0-1.7-.1-3.4-.4-5H24v9.5h12.5c-.5 3-2.1 5.6-4.5 7.3l7 5.5c4-3.7 6.3-9.2 6.3-17.3z"/>
+          <path fill="#FBBC05" d="M10.4 28.1c-1.2-3.4-1.2-7.1 0-10.5L2.6 11.5C-1.1 17.7-1.1 24.3 2.6 30.5l7.8-6.4z"/>
+          <path fill="#34A853" d="M24 48c6.5 0 12-2.2 16-6l-7.7-6c-2.1 1.5-4.8 2.4-8.3 2.4-6.3 0-11.7-4.3-13.6-10l-7.8 6.1C6.8 42.6 14.8 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        Entrar com Google
+      </button>
+      <!-- Link discreto de "Esqueceu a senha?" posicionado acima do toggle de cadastro -->
+      <p id="forgot-password" class="toggle fade-in-up">Esqueceu a senha?</p>
+      <p class="toggle fade-in-up" onclick="toggleForm()">Não tem uma conta? Cadastre-se</p>
+    </div>
+
+    <!-- Formulário de Cadastro (a conta só será criada após confirmação do código) -->
+    <div id="signup-form" style="display: none;" class="fade-in-up">
+      <h2 class="fade-in-up">Cadastro</h2>
+      <input type="email" id="email-signup" placeholder="Email" required class="fade-in-up">
+      <div class="password-container fade-in-up">
+        <input type="password" id="password-signup" placeholder="Crie uma senha" required class="fade-in-up">
+        <svg class="toggle-password" onclick="togglePassword('password-signup')" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#bbb" viewBox="0 0 24 24">
+          <path d="M12 4.5C7.305 4.5 3.291 7.258 1.5 12c1.791 4.742 5.805 7.5 10.5 7.5s8.709-2.758 10.5-7.5C20.709 7.258 16.695 4.5 12 4.5zm0 13c-3.04 0-5.5-2.46-5.5-5.5S8.96 6.5 12 6.5s5.5 2.46 5.5 5.5-2.46 5.5-5.5 5.5z"/>
+          <circle cx="12" cy="12" r="2.5"/>
+        </svg>
+      </div>
+      <button class="btn fade-in-up" onclick="handleSignup()">Cadastrar</button>
+      <button class="btn google-btn fade-in-up" onclick="signupWithGoogle()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.6 0 6.8 1.2 9.2 3.2l6.8-6.8C35 2.4 29.2 0 24 0 14.8 0 6.8 5.4 2.6 13.2l7.8 6.1C12.6 13.1 17.7 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.1 24.5c0-1.7-.1-3.4-.4-5H24v9.5h12.5c-.5 3-2.1 5.6-4.5 7.3l7 5.5c4-3.7 6.3-9.2 6.3-17.3z"/>
+          <path fill="#FBBC05" d="M10.4 28.1c-1.2-3.4-1.2-7.1 0-10.5L2.6 11.5C-1.1 17.7-1.1 24.3 2.6 30.5l7.8-6.4z"/>
+          <path fill="#34A853" d="M24 48c6.5 0 12-2.2 16-6l-7.7-6c-2.1 1.5-4.8 2.4-8.3 2.4-6.3 0-11.7-4.3-13.6-10l-7.8 6.1C6.8 42.6 14.8 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        Cadastrar com Google
+      </button>
+      <p class="toggle fade-in-up" onclick="toggleForm()">Já tem uma conta? Faça login</p>
+    </div>
+
+    <!-- Texto legal -->
+    <p class="legal">
+      Ao continuar, você concorda com nossos 
+      <a href="#" onclick="openLegal('termos')">Termos de Uso</a> e 
+      <a href="#" onclick="openLegal('privacidade')">Política de Privacidade</a>.
+      Este app não se responsabiliza por quaisquer danos decorrentes do uso.
+    </p>
+  </div>
+  
+  <!-- Tela Legal -->
+  <div id="legal-screen" class="legal-screen">
+    <div class="legal-content" id="legal-content">
+      <!-- Conteúdo legal será inserido dinamicamente -->
+    </div>
+    <p class="legal-date">Última atualização: 24/02/2025</p>
+    <p class="legal-warning">Aviso: Uso por sua conta e risco.</p>
+    <button class="btn back-btn fade-in-up" onclick="closeLegal()">Voltar</button>
+  </div>
+  
+  <!-- Tela de Verificação de Email (para criação da conta) -->
+  <div id="verification-screen" class="verification-screen">
+    <div class="verification-content" id="verification-content">
+      <h2>Verificação de Email</h2>
+      <p>Um código foi enviado para o seu email.<br>Por favor, insira-o para confirmar seu cadastro.</p>
+      <input type="text" id="verification-code" placeholder="Código de verificação">
+      <button class="btn" onclick="confirmEmail()">Confirmar</button>
+    </div>
+  </div>
+
+  <!-- Script de autenticação e interações (Firebase Modular) -->
+  <script type="module">
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword, 
+      signInWithPopup, 
+      sendPasswordResetEmail, 
+      GoogleAuthProvider 
+    } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    const app = window.myFirebaseApp;
+    const auth = getAuth(app);
+    
+    // Variável para armazenar a quantidade de tentativas falhas de login
+    let failedAttempts = 0;
+    
+    // Variável para armazenar os dados pendentes de cadastro
+    let pendingSignup = null;
+    
+    // Email do administrador criptografado em Base64
+    const adminEncrypted = 'am9obmFudGFubmJyYXppbEBnbWFpbC5jb20='; // "jonhantannbrazil@gmail.com"
+    
+    // Exibe notificações personalizadas
+    function showNotification(message, type) {
+      const notification = document.getElementById('notification');
+      notification.innerText = message;
+      notification.className = 'notification show ' + (type === 'success' ? 'notification--success' : 'notification--error');
+      setTimeout(() => {
+        notification.className = 'notification';
+      }, 3000);
+    }
+    window.showNotification = showNotification;
+    
+    // Alterna entre formulários de login e cadastro
+    function toggleForm() {
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      if (loginForm.style.display === 'none') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+      } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+      }
+      const logoContainer = document.getElementById('logo-container');
+      logoContainer.classList.remove('fade-in-up');
+      void logoContainer.offsetWidth;
+      logoContainer.classList.add('fade-in-up');
+    }
+    window.toggleForm = toggleForm;
+    
+    // Alterna visualização da senha
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      field.type = field.type === 'password' ? 'text' : 'password';
+      field.nextElementSibling.classList.toggle('active');
+    }
+    window.togglePassword = togglePassword;
+    
+    // Login (a conta já está criada pois somente é criada após confirmação)
+    function handleAuth() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      if (!email || !password) {
+        showNotification('Preencha todos os campos!', 'error');
+        return;
+      }
+      signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          showNotification('Login bem-sucedido!', 'success');
+          failedAttempts = 0;
+          if(email === atob(adminEncrypted)) {
+            showNotification('Bem-vindo, Administrador!', 'success');
+          }
+        })
+        .catch(err => {
+          if (err.code === 'auth/wrong-password') {
+            failedAttempts++;
+            showNotification('Senha incorreta!', 'error');
+          } else if (err.code === 'auth/user-not-found') {
+            showNotification('Usuário não encontrado!', 'error');
+          } else {
+            showNotification('Erro: ' + err.message, 'error');
+          }
+        });
+    }
+    window.handleAuth = handleAuth;
+    
+    // Cadastro: Armazena dados pendentes, gera código e exibe tela de verificação
+    function handleSignup() {
+      const email = document.getElementById('email-signup').value.trim();
+      const password = document.getElementById('password-signup').value.trim();
+      if (!email || !password) {
+        showNotification('Preencha todos os campos!', 'error');
+        return;
+      }
+      // Gera um código de 6 dígitos
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      console.log('Código de verificação (simulado):', verificationCode);
+      // Armazena os dados pendentes
+      pendingSignup = { email, password, code: verificationCode };
+      // Exibe a tela de verificação
+      document.getElementById('signup-form').style.display = 'none';
+      document.getElementById('verification-screen').classList.add('show');
+    }
+    window.handleSignup = handleSignup;
+    
+    // Confirma o código inserido e cria a conta somente se o código estiver correto
+    function confirmEmail() {
+      const inputCode = document.getElementById('verification-code').value.trim();
+      if(pendingSignup && inputCode === pendingSignup.code) {
+        createUserWithEmailAndPassword(auth, pendingSignup.email, pendingSignup.password)
+          .then(userCredential => {
+            showNotification('Email verificado e conta criada com sucesso!', 'success');
+            document.getElementById('verification-screen').classList.remove('show');
+            pendingSignup = null;
+          })
+          .catch(err => {
+            showNotification('Erro ao criar conta: ' + err.message, 'error');
+          });
+      } else {
+        showNotification('Código incorreto! Tente novamente.', 'error');
+      }
+    }
+    window.confirmEmail = confirmEmail;
+    
+    // Login com Google
+    function loginWithGoogle() {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(userCredential => {
+          showNotification('Login com Google bem-sucedido!', 'success');
+          if(userCredential.user.email === atob(adminEncrypted)) {
+            showNotification('Bem-vindo, Administrador!', 'success');
+          }
+        })
+        .catch(err => showNotification('Erro: ' + err.message, 'error'));
+    }
+    window.loginWithGoogle = loginWithGoogle;
+    
+    // Cadastro com Google
+    function signupWithGoogle() {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(userCredential => showNotification('Cadastro com Google bem-sucedido!', 'success'))
+        .catch(err => showNotification('Erro: ' + err.message, 'error'));
+    }
+    window.signupWithGoogle = signupWithGoogle;
+    
+    // Envio de e-mail para redefinição de senha
+    function resetPassword() {
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        showNotification('Insira seu e-mail para redefinir a senha.', 'error');
+        return;
+      }
+      sendPasswordResetEmail(auth, email)
+        .then(() => showNotification('E-mail de redefinição enviado!', 'success'))
+        .catch(err => showNotification('Erro ao enviar e-mail: ' + err.message, 'error'));
+    }
+    window.resetPassword = resetPassword;
+    
+    // Configura o link "Esqueceu a senha?" (fica exposto de forma discreta)
+    document.getElementById('forgot-password').addEventListener('click', resetPassword);
+    
+    // Tela Legal com animação de fade out ao fechar
+    function openLegal(tipo) {
+      const legalScreen = document.getElementById('legal-screen');
+      const legalContent = document.getElementById('legal-content');
+      if (tipo === 'termos') {
+        legalContent.innerHTML = `<h2>Termos de Uso</h2>
+        <p>Bem-vindo ao Nome do App, seu aplicativo de mensagens que conecta pessoas de forma rápida e segura. Ao utilizar este serviço, você declara ter lido, compreendido e aceitado os termos a seguir: nosso aplicativo possibilita a troca de mensagens, imagens, vídeos e outros conteúdos multimídia. Você se compromete a usar o serviço de forma ética e responsável, sem infringir direitos autorais ou leis vigentes. Reservamo-nos o direito de modificar estes termos sem aviso prévio. <strong>Aviso:</strong> Uso por sua conta e risco.</p>`;
+      } else if (tipo === 'privacidade') {
+        legalContent.innerHTML = `<h2>Política de Privacidade</h2>
+        <p>Sua privacidade é fundamental para nós. No Nome do App, coletamos, usamos e armazenamos suas informações pessoais para melhorar sua experiência no envio e recebimento de mensagens. Seus dados, como informações de cadastro, contatos e conteúdos enviados, são tratados com segurança e não são compartilhados com terceiros sem seu consentimento, salvo exigência legal. Ao utilizar nosso serviço, você concorda com esta política, que poderá ser atualizada periodicamente. <strong>Aviso:</strong> Uso por sua conta e risco.</p>`;
+      }
+      legalScreen.classList.add('show');
+    }
+    window.openLegal = openLegal;
+    
+    function closeLegal() {
+      const legalScreen = document.getElementById('legal-screen');
+      legalScreen.style.animation = 'fadeOut 0.5s ease forwards';
+      legalScreen.addEventListener('animationend', () => {
+        legalScreen.classList.remove('show');
+        legalScreen.style.animation = '';
+      }, { once: true });
+    }
+    window.closeLegal = closeLegal;
+    window.location.href = "home.html";
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+</body>
+</html>
