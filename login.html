@@ -523,10 +523,10 @@
     .then(userCredential => {
       showNotification('Login bem-sucedido!', 'success');
       failedAttempts = 0;
-      if(email === atob(adminEncrypted)) {
+      if (email === atob(adminEncrypted)) {
         showNotification('Bem-vindo, Administrador!', 'success');
       }
-      // Redireciona para a home após login bem-sucedido:
+      // Redireciona para a home após login bem-sucedido
       window.location.href = "home.html";
     })
     .catch(err => {
@@ -539,8 +539,7 @@
         showNotification('Erro: ' + err.message, 'error');
       }
     });
-        }
-    window.handleAuth = handleAuth;
+}
     
     // Cadastro: Armazena dados pendentes, gera código e exibe tela de verificação
     function handleSignup() {
