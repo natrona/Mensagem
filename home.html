@@ -2,122 +2,180 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tela Inicial - App de Mensagens</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home - App de Mensagens</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
   <style>
-    /* Estilos gerais */
-    body {
+    /* Reset e configurações globais */
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
       font-family: 'Roboto', sans-serif;
       background: #121212;
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-    /* Tela de carregamento */
-    #loadingScreen {
-      position: absolute;
-      width: 100%;
-      height: 100vh;
-      background: #121212;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      font-size: 24px;
-    }
-    /* Tela de mensagens passo a passo */
-    #messageScreen {
-      display: none;
-      position: absolute;
-      width: 100%;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      z-index: 9;
     }
-    .message-step {
-      margin: 10px 0;
-      opacity: 0;
-      animation: fadeInStep 1s ease forwards;
-    }
-    @keyframes fadeInStep {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    /* Interface do aplicativo de mensagens */
-    #appInterface {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    /* Cabeçalho */
+    header {
       background: #1f1f1f;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-size: 20px;
+    }
+    header button {
+      background: #f44336;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    /* Área de Chat */
+    #chatContainer {
+      flex: 1;
+      overflow-y: auto;
       padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      width: 90%;
-      max-width: 600px;
-      z-index: 8;
+      display: flex;
+      flex-direction: column;
+    }
+    .message {
+      max-width: 70%;
+      margin-bottom: 15px;
+      padding: 12px 16px;
+      border-radius: 20px;
+      word-wrap: break-word;
+      animation: fadeIn 0.3s ease;
+    }
+    .own {
+      background: #4caf50;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+    .other {
+      background: #333;
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Área de Input */
+    #inputContainer {
+      display: flex;
+      padding: 15px;
+      background: #1f1f1f;
+    }
+    #messageInput {
+      flex: 1;
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      background: #2a2a2a;
+      color: #fff;
+      font-size: 16px;
+    }
+    #sendButton {
+      background: #4caf50;
+      border: none;
+      padding: 10px 16px;
+      margin-left: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 </head>
 <body>
-  <!-- Tela de Carregamento -->
-  <div id="loadingScreen">Carregando...</div>
+  <header>
+    <h1>Chat</h1>
+    <button id="signOutButton">Sair</button>
+  </header>
 
-  <!-- Tela de Mensagens Passo a Passo -->
-  <div id="messageScreen">
-    <div class="message-step" style="animation-delay: 0s;">Bem-vindo ao App de Mensagens.</div>
-    <div class="message-step" style="animation-delay: 1.5s;">Este aplicativo encontra-se em fase de desenvolvimento e aprimoramento contínuo.</div>
-    <div class="message-step" style="animation-delay: 3s;">As funcionalidades estão sendo cuidadosamente implementadas para oferecer a melhor experiência possível.</div>
-    <div class="message-step" style="animation-delay: 4.5s;">Agradecemos sua paciência e confiança.</div>
-    <div class="message-step" style="animation-delay: 6s;">Aguarde enquanto iniciamos a interface de mensagens.</div>
+  <div id="chatContainer">
+    <!-- As mensagens serão adicionadas aqui -->
   </div>
 
-  <!-- Interface do Aplicativo de Mensagens -->
-  <div id="appInterface">
-    <h2>Interface de Mensagens</h2>
-    <p>Aqui você poderá enviar e receber mensagens.</p>
-    <!-- Insira os componentes reais da interface de mensagens aqui -->
+  <div id="inputContainer">
+    <input type="text" id="messageInput" placeholder="Digite sua mensagem...">
+    <button id="sendButton">➤</button>
   </div>
 
   <script type="module">
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
-    const auth = getAuth();
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
 
-    // Verifica se o usuário está autenticado
-    onAuthStateChanged(auth, (user) => {
+    // Recupera a instância do Firebase inicializada na tela de login
+    const app = window.myFirebaseApp;
+    if (!app) {
+      window.location.href = "login.html";
+    }
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    // Redireciona para a tela de login se o usuário não estiver autenticado
+    onAuthStateChanged(auth, user => {
       if (!user) {
-        // Se não estiver autenticado, redireciona para a página de login
         window.location.href = "login.html";
-      } else {
-        startHomeScreenProcess();
       }
     });
 
-    // Função que inicia o fluxo da tela inicial após o login
-    function startHomeScreenProcess() {
-      // Exibe a tela de carregamento por 2 segundos
-      setTimeout(() => {
-        document.getElementById('loadingScreen').style.display = 'none';
-        const messageScreen = document.getElementById('messageScreen');
-        messageScreen.style.display = 'flex';
+    const chatContainer = document.getElementById('chatContainer');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const signOutButton = document.getElementById('signOutButton');
 
-        // Após aproximadamente 7,5 segundos (tempo para exibir os passos), oculta as mensagens e exibe a interface do app
-        setTimeout(() => {
-          messageScreen.style.display = 'none';
-          document.getElementById('appInterface').style.display = 'block';
-        }, 7500);
-      }, 2000);
+    // Função para enviar mensagem
+    function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      const messageData = {
+        userId: auth.currentUser.uid,
+        text,
+        timestamp: Date.now()
+      };
+      push(ref(db, 'messages'), messageData);
+      messageInput.value = '';
     }
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    // Ouve e exibe novas mensagens
+    const messagesRef = ref(db, 'messages');
+    onChildAdded(messagesRef, snapshot => {
+      const msg = snapshot.val();
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message');
+      messageDiv.classList.add(msg.userId === auth.currentUser.uid ? 'own' : 'other');
+      messageDiv.textContent = msg.text;
+      chatContainer.appendChild(messageDiv);
+      // Rola a área de chat para mostrar a nova mensagem
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+
+    // Função para sair (redireciona para login.html)
+    signOutButton.addEventListener('click', () => {
+      signOut(auth)
+        .then(() => window.location.href = "login.html")
+        .catch(err => console.error("Erro ao sair:", err));
+    });
   </script>
 </body>
 </html>
